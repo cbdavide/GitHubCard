@@ -29,6 +29,19 @@ function Stat(props) {
     );
 }
 
+function Stats(props) {
+    return (
+        <div className="stats">
+            {props.data.map(stat => {
+                return (<Stat key={stat.label}
+                             label={stat.label}
+                             value={stat.value} />
+                         );
+            })}
+        </div>
+    );
+}
+
 function UserName(props) {
     return <div><em>{props.children}</em></div>;
 }
@@ -65,9 +78,9 @@ class App extends Component {
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                console.log('Here')
                 console.log(data)
-                this.setState({user: data})
+                if(!data.message)
+                    this.setState({user: data})
             })
             .catch(err => console.log(err))
         e.preventDefault();
@@ -80,20 +93,28 @@ class App extends Component {
             let {login, followers, following} = user;
             let {public_gists, public_repos} = user;
 
+            let stats = [
+                {label: 'Followers', value: followers},
+                {label: 'Following', value: following},
+                {label: 'Repos', value: public_repos},
+                {label: 'Gists', value: public_gists},
+            ]
+
             return (
                 <div>
-                <UserNameForm
-                    handleSubmit={this.handleSubmit}
-                    handleChange={this.handleChange}
-                    value={this.state.value}
-                />
-                <Avatar url={avatar_url} name={name} />
-                <Name profileUrl={html_url}>{name}</Name>
-                <UserName>{login}</UserName>
-                <Stat label="Followers" value={followers}/>
-                <Stat label="Following" value={following}/>
-                <Stat label="Repos" value={public_repos}/>
-                <Stat label="Gists" value={public_gists}/>
+                    <UserNameForm
+                        handleSubmit={this.handleSubmit}
+                        handleChange={this.handleChange}
+                        value={this.state.value}
+                    />
+                    <div className="card">
+                        <Avatar url={avatar_url} name={name} />
+                        <div className="info">
+                            <Name profileUrl={html_url}>{name}</Name>
+                            <UserName>{login}</UserName>
+                            <Stats data={stats} />
+                        </div>
+                    </div>
                 </div>
             );
         } else {

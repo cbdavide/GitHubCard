@@ -1,11 +1,29 @@
 a {
     text-decoration: none;
 }
+.card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0px;
+}
+.info {
+    display: flex;
+    flex-direction: column;
+    margin: 0px 10px;
+}
+.stats {
+    display: flex;
+    flex-direction: row;
+    border-top: 1px solid black;
+    padding: 10px;
+}
 .stat {
-    width: 10%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 0px 10px;
 }
 .picture {
     border-radius: 50%;
