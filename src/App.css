@@ -1,0 +1,12 @@
+a {
+    text-decoration: none;
+}
+.stat {
+    width: 10%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.picture {
+    border-radius: 50%;
+}
