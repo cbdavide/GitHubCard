@@ -3,7 +3,7 @@
 const path = require('path');
 
 const APP_DIR = path.resolve(__dirname, 'src');
-const BULD_DIR = path.resolve(__dirname, 'build');
+const BULD_DIR = path.resolve(__dirname, 'build/js');
 
 let config = {
     entry: path.join(APP_DIR, 'index.js'),
