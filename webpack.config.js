@@ -2,7 +2,7 @@
 
 const path = require('path');
 
-const APP_DIR = path.resolve(__dirname, 'src');
+const APP_DIR = path.resolve(__dirname, 'js');
 const BULD_DIR = path.resolve(__dirname, 'build/js');
 
 let config = {

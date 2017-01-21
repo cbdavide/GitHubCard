@@ -42,9 +42,9 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/*!**********************!*\
-  !*** ./src/index.js ***!
-  \**********************/
+/*!*********************!*\
+  !*** ./js/index.js ***!
+  \*********************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22027,9 +22027,9 @@
 
 /***/ },
 /* 178 */
-/*!********************!*\
-  !*** ./src/App.js ***!
-  \********************/
+/*!*******************!*\
+  !*** ./js/App.js ***!
+  \*******************/
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -22052,10 +22052,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	// import './App.css';
-	
 	function Avatar(props) {
-	    return _react2.default.createElement("img", { className: "picture",
+	    return _react2.default.createElement("img", { className: "col-xs-12 col-sm-4 img-thumbnail",
 	        src: props.url,
 	        alt: props.name,
 	        width: "200",
@@ -22071,7 +22069,7 @@
 	            "a",
 	            { href: props.profileUrl },
 	            _react2.default.createElement(
-	                "strong",
+	                "h1",
 	                null,
 	                props.children
 	            )
@@ -22085,12 +22083,12 @@
 	        { className: "stat" },
 	        _react2.default.createElement(
 	            "strong",
-	            { className: "label" },
+	            { className: "" },
 	            props.label
 	        ),
 	        _react2.default.createElement(
 	            "span",
-	            { className: "value" },
+	            { className: "" },
 	            props.value
 	        )
 	    );
@@ -22099,7 +22097,7 @@
 	function Stats(props) {
 	    return _react2.default.createElement(
 	        "div",
-	        { className: "stats" },
+	        { className: "" },
 	        props.data.map(function (stat) {
 	            return _react2.default.createElement(Stat, { key: stat.label,
 	                label: stat.label,
@@ -22109,57 +22107,73 @@
 	}
 	
 	function UserName(props) {
-	    return _react2.default.createElement(
-	        "div",
-	        null,
-	        _react2.default.createElement(
-	            "em",
+	    var children = props.children.split(' ');
+	    if (children[1] === "null") {
+	        console.log('here');
+	        return _react2.default.createElement(
+	            "div",
 	            null,
-	            props.children
+	            _react2.default.createElement(
+	                "em",
+	                null,
+	                children[0]
+	            )
+	        );
+	    } else {
+	        return _react2.default.createElement(
+	            "div",
+	            null,
+	            _react2.default.createElement(
+	                "em",
+	                null,
+	                children[0]
+	            ),
+	            " \u2022 ",
+	            _react2.default.createElement(
+	                "em",
+	                null,
+	                children[1]
+	            )
+	        );
+	    }
+	}
+	
+	function UserNameForm(props) {
+	    return _react2.default.createElement(
+	        "form",
+	        { className: "row", onSubmit: props.handleSubmit },
+	        _react2.default.createElement(
+	            "div",
+	            { className: "input-group" },
+	            _react2.default.createElement(
+	                "span",
+	                { className: "input-group-addon", id: "basic-addon3" },
+	                "https://github.com/"
+	            ),
+	            _react2.default.createElement("input", { type: "text",
+	                className: "form-control",
+	                id: "basic-url",
+	                "aria-describedby": "basic-addon3",
+	                placeholder: "username",
+	                value: props.value,
+	                onChange: props.handleChange })
 	        )
 	    );
 	}
 	
-	var UserNameForm = function (_Component) {
-	    _inherits(UserNameForm, _Component);
-	
-	    function UserNameForm() {
-	        _classCallCheck(this, UserNameForm);
-	
-	        return _possibleConstructorReturn(this, (UserNameForm.__proto__ || Object.getPrototypeOf(UserNameForm)).apply(this, arguments));
-	    }
-	
-	    _createClass(UserNameForm, [{
-	        key: "render",
-	        value: function render() {
-	            return _react2.default.createElement(
-	                "form",
-	                { onSubmit: this.props.handleSubmit },
-	                _react2.default.createElement("input", { placeholder: "username",
-	                    value: this.props.value,
-	                    onChange: this.props.handleChange,
-	                    type: "text" }),
-	                _react2.default.createElement("input", { type: "submit", value: "buscar" })
-	            );
-	        }
-	    }]);
-	
-	    return UserNameForm;
-	}(_react.Component);
-	
-	var App = function (_Component2) {
-	    _inherits(App, _Component2);
+	var App = function (_Component) {
+	    _inherits(App, _Component);
 	
 	    function App(props) {
 	        _classCallCheck(this, App);
 	
-	        var _this2 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+	        var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 	
-	        _this2.state = { value: '' };
+	        _this.state = { value: '' };
 	
-	        _this2.handleSubmit = _this2.handleSubmit.bind(_this2);
-	        _this2.handleChange = _this2.handleChange.bind(_this2);
-	        return _this2;
+	        _this.handleSubmit = _this.handleSubmit.bind(_this);
+	        _this.handleChange = _this.handleChange.bind(_this);
+	        return _this;
 	    }
 	
 	    _createClass(App, [{
@@ -22170,14 +22184,14 @@
 	    }, {
 	        key: "handleSubmit",
 	        value: function handleSubmit(e) {
-	            var _this3 = this;
+	            var _this2 = this;
 	
 	            var url = "https://api.github.com/users/" + this.state.value;
 	            fetch(url).then(function (response) {
 	                return response.json();
 	            }).then(function (data) {
 	                console.log(data);
-	                if (!data.message) _this3.setState({ user: data });
+	                if (!data.message) _this2.setState({ user: data });
 	            }).catch(function (err) {
 	                return console.log(err);
 	            });
@@ -22191,7 +22205,8 @@
 	            if (user) {
 	                var avatar_url = user.avatar_url,
 	                    html_url = user.html_url,
-	                    name = user.name;
+	                    name = user.name,
+	                    email = user.email;
 	                var login = user.login,
 	                    followers = user.followers,
 	                    following = user.following;
@@ -22211,11 +22226,11 @@
 	                    }),
 	                    _react2.default.createElement(
 	                        "div",
-	                        { className: "card" },
+	                        { className: "row" },
 	                        _react2.default.createElement(Avatar, { url: avatar_url, name: name }),
 	                        _react2.default.createElement(
 	                            "div",
-	                            { className: "info" },
+	                            { className: "col-xs-12 col-sm-8" },
 	                            _react2.default.createElement(
 	                                Name,
 	                                { profileUrl: html_url },
@@ -22224,7 +22239,7 @@
 	                            _react2.default.createElement(
 	                                UserName,
 	                                null,
-	                                login
+	                                login + " " + email
 	                            ),
 	                            _react2.default.createElement(Stats, { data: stats })
 	                        )
@@ -22233,7 +22248,7 @@
 	            } else {
 	                return _react2.default.createElement(
 	                    "div",
-	                    null,
+	                    { className: "row" },
 	                    _react2.default.createElement(UserNameForm, {
 	                        handleSubmit: this.handleSubmit,
 	                        handleChange: this.handleChange,

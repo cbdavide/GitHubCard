@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-// import './App.css';
 
 function Avatar(props) {
-    return (<img className="picture"
+    return (<img className="col-xs-12 col-sm-4 img-thumbnail"
                 src={props.url}
                 alt={props.name}
                 width="200"
@@ -14,7 +13,7 @@ function Name(props) {
     return (
         <div>
             <a href={props.profileUrl}>
-                <strong>{props.children}</strong>
+                <h1>{props.children}</h1>
             </a>
         </div>
     );
@@ -23,15 +22,15 @@ function Name(props) {
 function Stat(props) {
     return (
         <div className="stat">
-            <strong className="label">{props.label}</strong>
-            <span className="value">{props.value}</span>
+            <strong className="">{props.label}</strong>
+            <span className="">{props.value}</span>
         </div>
     );
 }
 
 function Stats(props) {
     return (
-        <div className="stats">
+        <div className="">
             {props.data.map(stat => {
                 return (<Stat key={stat.label}
                              label={stat.label}
@@ -43,21 +42,36 @@ function Stats(props) {
 }
 
 function UserName(props) {
-    return <div><em>{props.children}</em></div>;
-}
-
-class UserNameForm extends Component{
-    render() {
+    let children = props.children.split(' ');
+    if(children[1] === "null") {
+        console.log('here');
+        return <div><em>{children[0]}</em></div>
+    } else {
         return (
-            <form onSubmit={this.props.handleSubmit}>
-                <input placeholder="username"
-                       value={this.props.value}
-                       onChange={this.props.handleChange}
-                       type="text" />
-                <input type="submit" value="buscar" />
-            </form>
+            <div>
+            <em>{children[0]}</em> • <em>{children[1]}</em>
+            </div>
         );
     }
+}
+
+function UserNameForm(props) {
+    return (
+        <form className="row" onSubmit={props.handleSubmit}>
+            <div className="input-group">
+                <span className="input-group-addon" id="basic-addon3" >
+                    https://github.com/
+                </span>
+                <input type="text"
+                       className="form-control"
+                       id="basic-url"
+                       aria-describedby="basic-addon3"
+                       placeholder="username"
+                       value={props.value}
+                       onChange={props.handleChange} />
+           </div>
+        </form>
+    );
 }
 
 class App extends Component {
@@ -89,7 +103,7 @@ class App extends Component {
     render() {
         let {user} = this.state;
         if(user) {
-            let {avatar_url, html_url, name} = user;
+            let {avatar_url, html_url, name, email} = user;
             let {login, followers, following} = user;
             let {public_gists, public_repos} = user;
 
@@ -107,11 +121,11 @@ class App extends Component {
                         handleChange={this.handleChange}
                         value={this.state.value}
                     />
-                    <div className="card">
+                    <div className="row">
                         <Avatar url={avatar_url} name={name} />
-                        <div className="info">
+                        <div className="col-xs-12 col-sm-8">
                             <Name profileUrl={html_url}>{name}</Name>
-                            <UserName>{login}</UserName>
+                            <UserName>{`${login} ${email}`}</UserName>
                             <Stats data={stats} />
                         </div>
                     </div>
@@ -119,7 +133,7 @@ class App extends Component {
             );
         } else {
             return (
-                <div>
+                <div className="row">
                     <UserNameForm
                         handleSubmit={this.handleSubmit}
                         handleChange={this.handleChange}
