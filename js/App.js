@@ -1,7 +1,16 @@
 import React, { Component } from 'react';
 
+function User(props) {
+    return (
+        <div>
+            <Avatar url={props.avatar_url} name={props.children}/>
+            <Name profileUrl={props.html_url}>{props.children}</Name>
+        </div>
+    );
+}
+
 function Avatar(props) {
-    return (<img className="col-xs-12 col-sm-4 img-thumbnail"
+    return (<img className="img-thumbnail"
                 src={props.url}
                 alt={props.name}
                 width="200"
@@ -19,22 +28,35 @@ function Name(props) {
     );
 }
 
-function Stat(props) {
-    return (
-        <div className="stat">
-            <strong className="">{props.label}</strong>
-            <span className="">{props.value}</span>
-        </div>
-    );
+class Stat extends Component {
+    constructor(props) {
+        super(props);
+
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick() {
+        this.props.handleClick({label: this.props.label})
+    }
+
+    render() {
+        return (
+            <div onClick={this.handleClick}className="stat__item">
+            <strong className="">{this.props.label}</strong>
+            <span className="">{this.props.value}</span>
+            </div>
+        );
+    }
 }
 
 function Stats(props) {
     return (
-        <div className="">
+        <div className="stat">
             {props.data.map(stat => {
                 return (<Stat key={stat.label}
                              label={stat.label}
-                             value={stat.value} />
+                             value={stat.value}
+                             handleClick={props.handler} />
                          );
             })}
         </div>
@@ -81,6 +103,11 @@ class App extends Component {
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleClickStat = this.handleClickStat.bind(this);
+    }
+
+    handleClickStat(label) {
+        console.log(label);
     }
 
     handleChange(e) {
@@ -126,7 +153,7 @@ class App extends Component {
                         <div className="col-xs-12 col-sm-8">
                             <Name profileUrl={html_url}>{name}</Name>
                             <UserName>{`${login} ${email}`}</UserName>
-                            <Stats data={stats} />
+                            <Stats data={stats} handler={this.handleClickStat}/>
                         </div>
                     </div>
                 </div>
@@ -144,5 +171,7 @@ class App extends Component {
         }
     }
 }
+
+
 
 export default App;

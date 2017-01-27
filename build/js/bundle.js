@@ -22052,8 +22052,21 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	function User(props) {
+	    return _react2.default.createElement(
+	        "div",
+	        null,
+	        _react2.default.createElement(Avatar, { url: props.avatar_url, name: props.children }),
+	        _react2.default.createElement(
+	            Name,
+	            { profileUrl: props.html_url },
+	            props.children
+	        )
+	    );
+	}
+	
 	function Avatar(props) {
-	    return _react2.default.createElement("img", { className: "col-xs-12 col-sm-4 img-thumbnail",
+	    return _react2.default.createElement("img", { className: "img-thumbnail",
 	        src: props.url,
 	        alt: props.name,
 	        width: "200",
@@ -22077,31 +22090,55 @@
 	    );
 	}
 	
-	function Stat(props) {
-	    return _react2.default.createElement(
-	        "div",
-	        { className: "stat" },
-	        _react2.default.createElement(
-	            "strong",
-	            { className: "" },
-	            props.label
-	        ),
-	        _react2.default.createElement(
-	            "span",
-	            { className: "" },
-	            props.value
-	        )
-	    );
-	}
+	var Stat = function (_Component) {
+	    _inherits(Stat, _Component);
+	
+	    function Stat(props) {
+	        _classCallCheck(this, Stat);
+	
+	        var _this = _possibleConstructorReturn(this, (Stat.__proto__ || Object.getPrototypeOf(Stat)).call(this, props));
+	
+	        _this.handleClick = _this.handleClick.bind(_this);
+	        return _this;
+	    }
+	
+	    _createClass(Stat, [{
+	        key: "handleClick",
+	        value: function handleClick() {
+	            this.props.handleClick({ label: this.props.label });
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(
+	                "div",
+	                { onClick: this.handleClick, className: "stat__item" },
+	                _react2.default.createElement(
+	                    "strong",
+	                    { className: "" },
+	                    this.props.label
+	                ),
+	                _react2.default.createElement(
+	                    "span",
+	                    { className: "" },
+	                    this.props.value
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return Stat;
+	}(_react.Component);
 	
 	function Stats(props) {
 	    return _react2.default.createElement(
 	        "div",
-	        { className: "" },
+	        { className: "stat" },
 	        props.data.map(function (stat) {
 	            return _react2.default.createElement(Stat, { key: stat.label,
 	                label: stat.label,
-	                value: stat.value });
+	                value: stat.value,
+	                handleClick: props.handler });
 	        })
 	    );
 	}
@@ -22161,22 +22198,28 @@
 	    );
 	}
 	
-	var App = function (_Component) {
-	    _inherits(App, _Component);
+	var App = function (_Component2) {
+	    _inherits(App, _Component2);
 	
 	    function App(props) {
 	        _classCallCheck(this, App);
 	
-	        var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+	        var _this2 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 	
-	        _this.state = { value: '' };
+	        _this2.state = { value: '' };
 	
-	        _this.handleSubmit = _this.handleSubmit.bind(_this);
-	        _this.handleChange = _this.handleChange.bind(_this);
-	        return _this;
+	        _this2.handleSubmit = _this2.handleSubmit.bind(_this2);
+	        _this2.handleChange = _this2.handleChange.bind(_this2);
+	        _this2.handleClickStat = _this2.handleClickStat.bind(_this2);
+	        return _this2;
 	    }
 	
 	    _createClass(App, [{
+	        key: "handleClickStat",
+	        value: function handleClickStat(label) {
+	            console.log(label);
+	        }
+	    }, {
 	        key: "handleChange",
 	        value: function handleChange(e) {
 	            this.setState({ value: e.target.value });
@@ -22184,14 +22227,14 @@
 	    }, {
 	        key: "handleSubmit",
 	        value: function handleSubmit(e) {
-	            var _this2 = this;
+	            var _this3 = this;
 	
 	            var url = "https://api.github.com/users/" + this.state.value;
 	            fetch(url).then(function (response) {
 	                return response.json();
 	            }).then(function (data) {
 	                console.log(data);
-	                if (!data.message) _this2.setState({ user: data });
+	                if (!data.message) _this3.setState({ user: data });
 	            }).catch(function (err) {
 	                return console.log(err);
 	            });
@@ -22241,7 +22284,7 @@
 	                                null,
 	                                login + " " + email
 	                            ),
-	                            _react2.default.createElement(Stats, { data: stats })
+	                            _react2.default.createElement(Stats, { data: stats, handler: this.handleClickStat })
 	                        )
 	                    )
 	                );
