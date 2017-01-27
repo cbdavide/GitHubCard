@@ -22032,7 +22032,7 @@
   \*******************/
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -22044,6 +22044,8 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _Components = __webpack_require__(/*! ./Components */ 179);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -22051,44 +22053,6 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	function User(props) {
-	    return _react2.default.createElement(
-	        "div",
-	        null,
-	        _react2.default.createElement(Avatar, { url: props.avatar_url, name: props.children }),
-	        _react2.default.createElement(
-	            Name,
-	            { profileUrl: props.html_url },
-	            props.children
-	        )
-	    );
-	}
-	
-	function Avatar(props) {
-	    return _react2.default.createElement("img", { className: "img-thumbnail",
-	        src: props.url,
-	        alt: props.name,
-	        width: "200",
-	        height: "200"
-	    });
-	}
-	
-	function Name(props) {
-	    return _react2.default.createElement(
-	        "div",
-	        null,
-	        _react2.default.createElement(
-	            "a",
-	            { href: props.profileUrl },
-	            _react2.default.createElement(
-	                "h1",
-	                null,
-	                props.children
-	            )
-	        )
-	    );
-	}
 	
 	var Stat = function (_Component) {
 	    _inherits(Stat, _Component);
@@ -22103,24 +22067,24 @@
 	    }
 	
 	    _createClass(Stat, [{
-	        key: "handleClick",
+	        key: 'handleClick',
 	        value: function handleClick() {
 	            this.props.handleClick({ label: this.props.label });
 	        }
 	    }, {
-	        key: "render",
+	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
-	                "div",
-	                { onClick: this.handleClick, className: "stat__item" },
+	                'div',
+	                { onClick: this.handleClick, className: 'stat__item' },
 	                _react2.default.createElement(
-	                    "strong",
-	                    { className: "" },
+	                    'strong',
+	                    { className: '' },
 	                    this.props.label
 	                ),
 	                _react2.default.createElement(
-	                    "span",
-	                    { className: "" },
+	                    'span',
+	                    { className: '' },
 	                    this.props.value
 	                )
 	            );
@@ -22132,8 +22096,8 @@
 	
 	function Stats(props) {
 	    return _react2.default.createElement(
-	        "div",
-	        { className: "stat" },
+	        'div',
+	        { className: 'stat' },
 	        props.data.map(function (stat) {
 	            return _react2.default.createElement(Stat, { key: stat.label,
 	                label: stat.label,
@@ -22143,55 +22107,23 @@
 	    );
 	}
 	
-	function UserName(props) {
-	    var children = props.children.split(' ');
-	    if (children[1] === "null") {
-	        console.log('here');
-	        return _react2.default.createElement(
-	            "div",
-	            null,
-	            _react2.default.createElement(
-	                "em",
-	                null,
-	                children[0]
-	            )
-	        );
-	    } else {
-	        return _react2.default.createElement(
-	            "div",
-	            null,
-	            _react2.default.createElement(
-	                "em",
-	                null,
-	                children[0]
-	            ),
-	            " \u2022 ",
-	            _react2.default.createElement(
-	                "em",
-	                null,
-	                children[1]
-	            )
-	        );
-	    }
-	}
-	
 	function UserNameForm(props) {
 	    return _react2.default.createElement(
-	        "form",
-	        { className: "row", onSubmit: props.handleSubmit },
+	        'form',
+	        { className: 'row', onSubmit: props.handleSubmit },
 	        _react2.default.createElement(
-	            "div",
-	            { className: "input-group" },
+	            'div',
+	            { className: 'input-group' },
 	            _react2.default.createElement(
-	                "span",
-	                { className: "input-group-addon", id: "basic-addon3" },
-	                "https://github.com/"
+	                'span',
+	                { className: 'input-group-addon', id: 'basic-addon3' },
+	                'https://github.com/'
 	            ),
-	            _react2.default.createElement("input", { type: "text",
-	                className: "form-control",
-	                id: "basic-url",
-	                "aria-describedby": "basic-addon3",
-	                placeholder: "username",
+	            _react2.default.createElement('input', { type: 'text',
+	                className: 'form-control',
+	                id: 'basic-url',
+	                'aria-describedby': 'basic-addon3',
+	                placeholder: 'username',
 	                value: props.value,
 	                onChange: props.handleChange })
 	        )
@@ -22215,21 +22147,21 @@
 	    }
 	
 	    _createClass(App, [{
-	        key: "handleClickStat",
+	        key: 'handleClickStat',
 	        value: function handleClickStat(label) {
 	            console.log(label);
 	        }
 	    }, {
-	        key: "handleChange",
+	        key: 'handleChange',
 	        value: function handleChange(e) {
 	            this.setState({ value: e.target.value });
 	        }
 	    }, {
-	        key: "handleSubmit",
+	        key: 'handleSubmit',
 	        value: function handleSubmit(e) {
 	            var _this3 = this;
 	
-	            var url = "https://api.github.com/users/" + this.state.value;
+	            var url = 'https://api.github.com/users/' + this.state.value;
 	            fetch(url).then(function (response) {
 	                return response.json();
 	            }).then(function (data) {
@@ -22241,7 +22173,7 @@
 	            e.preventDefault();
 	        }
 	    }, {
-	        key: "render",
+	        key: 'render',
 	        value: function render() {
 	            var user = this.state.user;
 	
@@ -22260,7 +22192,7 @@
 	                var stats = [{ label: 'Followers', value: followers }, { label: 'Following', value: following }, { label: 'Repos', value: public_repos }, { label: 'Gists', value: public_gists }];
 	
 	                return _react2.default.createElement(
-	                    "div",
+	                    'div',
 	                    null,
 	                    _react2.default.createElement(UserNameForm, {
 	                        handleSubmit: this.handleSubmit,
@@ -22268,30 +22200,26 @@
 	                        value: this.state.value
 	                    }),
 	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "row" },
-	                        _react2.default.createElement(Avatar, { url: avatar_url, name: name }),
+	                        'div',
+	                        { className: 'row' },
+	                        _react2.default.createElement(_Components.Avatar, { url: avatar_url, name: name }),
 	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "col-xs-12 col-sm-8" },
+	                            'div',
+	                            { className: 'col-xs-12 col-sm-8' },
 	                            _react2.default.createElement(
-	                                Name,
+	                                _Components.LinkedName,
 	                                { profileUrl: html_url },
 	                                name
 	                            ),
-	                            _react2.default.createElement(
-	                                UserName,
-	                                null,
-	                                login + " " + email
-	                            ),
+	                            _react2.default.createElement(_Components.UserTags, { tags: [login, email] }),
 	                            _react2.default.createElement(Stats, { data: stats, handler: this.handleClickStat })
 	                        )
 	                    )
 	                );
 	            } else {
 	                return _react2.default.createElement(
-	                    "div",
-	                    { className: "row" },
+	                    'div',
+	                    { className: 'row' },
 	                    _react2.default.createElement(UserNameForm, {
 	                        handleSubmit: this.handleSubmit,
 	                        handleChange: this.handleChange,
@@ -22306,6 +22234,78 @@
 	}(_react.Component);
 	
 	exports.default = App;
+
+/***/ },
+/* 179 */
+/*!**************************!*\
+  !*** ./js/Components.js ***!
+  \**************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.UserTags = exports.LinkedName = exports.Avatar = undefined;
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function Avatar(props) {
+	    return _react2.default.createElement('img', { className: 'img-thumbnail',
+	        src: props.url,
+	        alt: props.name,
+	        width: props.width,
+	        height: props.height
+	    });
+	}
+	
+	function LinkedName(props) {
+	    return _react2.default.createElement(
+	        'span',
+	        null,
+	        _react2.default.createElement(
+	            'a',
+	            { href: props.profileUrl },
+	            _react2.default.createElement(
+	                'h1',
+	                null,
+	                props.children
+	            )
+	        )
+	    );
+	}
+	
+	function Tag(props) {
+	    return _react2.default.createElement(
+	        'em',
+	        null,
+	        props.children
+	    );
+	}
+	
+	function UserTags(props) {
+	    return _react2.default.createElement(
+	        'div',
+	        null,
+	        props.tags.map(function (tag) {
+	            return _react2.default.createElement(
+	                Tag,
+	                null,
+	                tag,
+	                ' \u2022 '
+	            );
+	        })
+	    );
+	}
+	
+	exports.Avatar = Avatar;
+	exports.LinkedName = LinkedName;
+	exports.UserTags = UserTags;
 
 /***/ }
 /******/ ]);

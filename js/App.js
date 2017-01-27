@@ -1,32 +1,5 @@
 import React, { Component } from 'react';
-
-function User(props) {
-    return (
-        <div>
-            <Avatar url={props.avatar_url} name={props.children}/>
-            <Name profileUrl={props.html_url}>{props.children}</Name>
-        </div>
-    );
-}
-
-function Avatar(props) {
-    return (<img className="img-thumbnail"
-                src={props.url}
-                alt={props.name}
-                width="200"
-                height="200"
-            />);
-}
-
-function Name(props) {
-    return (
-        <div>
-            <a href={props.profileUrl}>
-                <h1>{props.children}</h1>
-            </a>
-        </div>
-    );
-}
+import {Avatar, LinkedName, UserTags} from './Components'
 
 class Stat extends Component {
     constructor(props) {
@@ -61,20 +34,6 @@ function Stats(props) {
             })}
         </div>
     );
-}
-
-function UserName(props) {
-    let children = props.children.split(' ');
-    if(children[1] === "null") {
-        console.log('here');
-        return <div><em>{children[0]}</em></div>
-    } else {
-        return (
-            <div>
-            <em>{children[0]}</em> • <em>{children[1]}</em>
-            </div>
-        );
-    }
 }
 
 function UserNameForm(props) {
@@ -151,8 +110,8 @@ class App extends Component {
                     <div className="row">
                         <Avatar url={avatar_url} name={name} />
                         <div className="col-xs-12 col-sm-8">
-                            <Name profileUrl={html_url}>{name}</Name>
-                            <UserName>{`${login} ${email}`}</UserName>
+                            <LinkedName profileUrl={html_url}>{name}</LinkedName>
+                            <UserTags tags={[login, email]} />
                             <Stats data={stats} handler={this.handleClickStat}/>
                         </div>
                     </div>
