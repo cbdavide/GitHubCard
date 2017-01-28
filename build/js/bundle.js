@@ -22044,9 +22044,15 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _util = __webpack_require__(/*! ./util */ 179);
+	
 	var _Components = __webpack_require__(/*! ./Components */ 180);
 	
-	var _User = __webpack_require__(/*! ./User */ 179);
+	var _User = __webpack_require__(/*! ./User */ 181);
+	
+	var _List = __webpack_require__(/*! ./List */ 182);
+	
+	var _List2 = _interopRequireDefault(_List);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -22158,12 +22164,13 @@
 	                following = user.following;
 	            var public_gists = user.public_gists,
 	                public_repos = user.public_repos;
-	            var followers_url = user.followers_url;
+	            var followers_url = user.followers_url,
+	                following_url = user.following_url,
+	                gists_url = user.gists_url,
+	                repos_url = user.repos_url;
 	
 	
-	            console.log(followers_url);
-	
-	            var stats = [{ label: 'Followers', value: followers, url: followers_url }, { label: 'Following', value: following }, { label: 'Repos', value: public_repos }, { label: 'Gists', value: public_gists }];
+	            var stats = [{ label: 'Followers', value: followers, url: followers_url }, { label: 'Following', value: following, url: following_url }, { label: 'Repos', value: public_repos, url: repos_url }, { label: 'Gists', value: public_gists, url: gists_url }];
 	
 	            return _react2.default.createElement(
 	                'article',
@@ -22210,12 +22217,25 @@
 	    _createClass(App, [{
 	        key: 'handleClickStat',
 	        value: function handleClickStat(stat) {
-	            console.log(stat);
-	            this.setState({
-	                list: {
-	                    url: stat.url,
-	                    label: stat.label
-	                }
+	            var _this4 = this;
+	
+	            stat.url = (0, _util.sanitizeUrl)(stat.url);
+	            fetch(stat.url).then(function (res) {
+	                _this4.setState({
+	                    list: undefined
+	                });
+	                return res.json();
+	            }).then(function (data) {
+	                // console.log(data);
+	                _this4.setState({
+	                    list: {
+	                        data: data,
+	                        label: stat.label,
+	                        url: stat.url
+	                    }
+	                });
+	            }).catch(function (err) {
+	                console.log(err);
 	            });
 	        }
 	    }, {
@@ -22226,15 +22246,15 @@
 	    }, {
 	        key: 'handleSubmit',
 	        value: function handleSubmit(e) {
-	            var _this4 = this;
+	            var _this5 = this;
 	
 	            var url = 'https://api.github.com/users/' + this.state.value;
 	            fetch(url).then(function (response) {
-	                _this4.setState({ user: undefined });
+	                _this5.setState({ user: undefined });
 	                return response.json();
 	            }).then(function (data) {
 	                console.log(data);
-	                if (!data.message) _this4.setState({ user: data });
+	                if (!data.message) _this5.setState({ user: data });
 	            }).catch(function (err) {
 	                return console.log(err);
 	            });
@@ -22245,11 +22265,19 @@
 	        value: function render() {
 	
 	            var userCard = '';
+	            var list = '';
 	
 	            if (this.state.user) {
 	                userCard = _react2.default.createElement(UserCard, { handleClickStat: this.handleClickStat,
-	                    user: this.state.user
-	                });
+	                    user: this.state.user });
+	            }
+	
+	            if (this.state.list) {
+	                var _state$list = this.state.list,
+	                    label = _state$list.label,
+	                    data = _state$list.data;
+	
+	                list = _react2.default.createElement(_List2.default, { label: label, data: data });
 	            }
 	
 	            return _react2.default.createElement(
@@ -22260,7 +22288,8 @@
 	                    handleChange: this.handleChange,
 	                    value: this.state.value
 	                }),
-	                userCard
+	                userCard,
+	                list
 	            );
 	        }
 	    }]);
@@ -22273,53 +22302,23 @@
 /***/ },
 /* 179 */
 /*!********************!*\
-  !*** ./js/User.js ***!
+  !*** ./js/util.js ***!
   \********************/
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.UserList = undefined;
+	function sanitizeUrl(url) {
+	    var regex = /([\w\:\/\.]+)({\W\w+})?/g;
+	    var result = regex.exec(url);
 	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _Components = __webpack_require__(/*! ./Components */ 180);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function UserItem(props) {
-	    return _react2.default.createElement(
-	        'article',
-	        null,
-	        _react2.default.createElement(_Components.Avatar, { url: props.avatar_url, name: props.children }),
-	        _react2.default.createElement(
-	            _Components.LinkedName,
-	            { profileUrl: props.html_url },
-	            props.children
-	        )
-	    );
+	    return result[1];
 	}
 	
-	function UserList(props) {
-	    return _react2.default.createElement(
-	        Section,
-	        null,
-	        props.items.map(function (user) {
-	            return _react2.default.createElement(
-	                UserItem,
-	                { key: user.id, url: user.avatar_url, profileUrl: user.html_url },
-	                user.login
-	            );
-	        })
-	    );
-	}
-	
-	exports.UserList = UserList;
+	exports.sanitizeUrl = sanitizeUrl;
 
 /***/ },
 /* 180 */
@@ -22398,6 +22397,92 @@
 	exports.Avatar = Avatar;
 	exports.LinkedName = LinkedName;
 	exports.UserTags = UserTags;
+
+/***/ },
+/* 181 */
+/*!********************!*\
+  !*** ./js/User.js ***!
+  \********************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.UserList = undefined;
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _Components = __webpack_require__(/*! ./Components */ 180);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function UserItem(props) {
+	    return _react2.default.createElement(
+	        'li',
+	        null,
+	        _react2.default.createElement(_Components.Avatar, { width: '100px', height: '100px', url: props.avatar_url, name: props.children }),
+	        _react2.default.createElement(
+	            _Components.LinkedName,
+	            { profileUrl: props.html_url },
+	            props.children
+	        )
+	    );
+	}
+	
+	function UserList(props) {
+	    return _react2.default.createElement(
+	        'ul',
+	        null,
+	        props.items.map(function (user) {
+	            return _react2.default.createElement(
+	                UserItem,
+	                { key: user.id, avatar_url: user.avatar_url, profileUrl: user.html_url },
+	                user.login
+	            );
+	        })
+	    );
+	}
+	
+	exports.UserList = UserList;
+
+/***/ },
+/* 182 */
+/*!********************!*\
+  !*** ./js/List.js ***!
+  \********************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _User = __webpack_require__(/*! ./User */ 181);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function List(props) {
+	    if (props.label === 'Followers' || props.label === 'Following') {
+	        return _react2.default.createElement(_User.UserList, { items: props.data });
+	    } else {
+	        return _react2.default.createElement(
+	            'h1',
+	            null,
+	            'Perrito :) '
+	        );
+	    }
+	}
+	
+	exports.default = List;
 
 /***/ }
 /******/ ]);

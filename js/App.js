@@ -1,8 +1,10 @@
 'use strict';
 
 import React, { Component } from 'react';
+import {sanitizeUrl} from './util';
 import {Avatar, LinkedName, UserTags} from './Components';
 import {UserList} from './User';
+import List from './List'
 
 class Stat extends Component {
     constructor(props) {
@@ -72,15 +74,13 @@ class UserCard extends Component {
         let {avatar_url, html_url, name, email} = user;
         let {login, followers, following} = user;
         let {public_gists, public_repos} = user;
-        let {followers_url} = user;
-
-        console.log(followers_url);
+        let {followers_url, following_url, gists_url, repos_url} = user;
 
         let stats = [
             {label: 'Followers', value: followers, url: followers_url},
-            {label: 'Following', value: following},
-            {label: 'Repos', value: public_repos},
-            {label: 'Gists', value: public_gists},
+            {label: 'Following', value: following, url: following_url},
+            {label: 'Repos', value: public_repos, url: repos_url},
+            {label: 'Gists', value: public_gists, url: gists_url},
         ]
 
         return (
@@ -112,13 +112,27 @@ class App extends Component {
     }
 
     handleClickStat(stat) {
-        console.log(stat);
-        this.setState({
-            list: {
-                url: stat.url,
-                label: stat.label
-            }
-        })
+        stat.url = sanitizeUrl(stat.url);
+        fetch(stat.url)
+            .then(res => {
+                this.setState({
+                    list: undefined
+                })
+                return res.json()
+            })
+            .then(data => {
+                // console.log(data);
+                this.setState({
+                    list: {
+                        data: data,
+                        label: stat.label,
+                        url: stat.url
+                    }
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     handleChange(e) {
@@ -143,13 +157,18 @@ class App extends Component {
     render() {
 
         let userCard = '';
+        let list = '';
 
         if(this.state.user){
             userCard = (
                 <UserCard handleClickStat={this.handleClickStat}
-                user={this.state.user}
-                />
+                          user={this.state.user}/>
             )
+        }
+
+        if(this.state.list) {
+            let {label, data} = this.state.list;
+            list = <List label={label} data={data} />
         }
 
         return (
@@ -160,6 +179,7 @@ class App extends Component {
                     value={this.state.value}
                 />
                 {userCard}
+                {list}
             </section>
         );
     }
