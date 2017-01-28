@@ -5,16 +5,16 @@ import {Avatar, LinkedName} from './Components'
 
 function UserItem(props) {
     return (
-        <li>
-            <Avatar width="100px" height="100px" url={props.avatar_url} name={props.children}/>
+        <article className="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+            <Avatar width="75px" height="75px" url={props.avatar_url} name={props.children}/>
             <LinkedName profileUrl={props.html_url}>{props.children}</LinkedName>
-        </li>
+        </article>
     );
 }
 
 function UserList(props) {
     return (
-        <ul>
+        <section className="row">
             {
                 props.items.map(user => {
                     return (
@@ -24,7 +24,7 @@ function UserList(props) {
                     )
                 })
             }
-        </ul>
+        </section>
     );
 }
 

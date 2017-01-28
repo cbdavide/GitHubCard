@@ -22422,9 +22422,9 @@
 	
 	function UserItem(props) {
 	    return _react2.default.createElement(
-	        'li',
-	        null,
-	        _react2.default.createElement(_Components.Avatar, { width: '100px', height: '100px', url: props.avatar_url, name: props.children }),
+	        'article',
+	        { className: 'col-xs-12 col-sm-6 col-md-4 col-lg-3' },
+	        _react2.default.createElement(_Components.Avatar, { width: '75px', height: '75px', url: props.avatar_url, name: props.children }),
 	        _react2.default.createElement(
 	            _Components.LinkedName,
 	            { profileUrl: props.html_url },
@@ -22435,8 +22435,8 @@
 	
 	function UserList(props) {
 	    return _react2.default.createElement(
-	        'ul',
-	        null,
+	        'section',
+	        { className: 'row' },
 	        props.items.map(function (user) {
 	            return _react2.default.createElement(
 	                UserItem,
