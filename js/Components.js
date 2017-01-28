@@ -30,15 +30,19 @@ function Tag(props) {
 }
 
 function UserTags(props) {
+    let tags = props.tags.filter(tag => {
+        return tag != null;
+    });
+
+    tags = tags.map(tag => {
+        return <Tag key={tag}>{tag} • </Tag>
+    })
+
     return (
         <div>
-            {
-                props.tags.map(tag => {
-                    return <Tag>{tag} • </Tag>
-                })
-            }
+            {tags}
         </div>
     );
 }
 
-export {Avatar, LinkedName, UserTags}
+export {Avatar, LinkedName, UserTags};

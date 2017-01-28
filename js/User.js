@@ -1,7 +1,7 @@
 'use strict';
 
 import React, {Component} from 'react';
-import {Avatar, LinkedName} from 'Components'
+import {Avatar, LinkedName} from './Components'
 
 function UserItem(props) {
     return (
@@ -18,14 +18,14 @@ function UserList(props) {
             {
                 props.items.map(user => {
                     return (
-                        <UserItem url={user.avatar_url} profileUrl={user.html_url}>
+                        <UserItem key={user.id} url={user.avatar_url} profileUrl={user.html_url}>
                             {user.login}
                         </UserItem>
                     )
                 })
             }
-        </Secion>
-    )
+        </Section>
+    );
 }
 
-export {UserList}
+export {UserList};

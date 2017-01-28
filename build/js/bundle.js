@@ -22044,7 +22044,9 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Components = __webpack_require__(/*! ./Components */ 179);
+	var _Components = __webpack_require__(/*! ./Components */ 180);
+	
+	var _User = __webpack_require__(/*! ./User */ 179);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -22069,7 +22071,10 @@
 	    _createClass(Stat, [{
 	        key: 'handleClick',
 	        value: function handleClick() {
-	            this.props.handleClick({ label: this.props.label });
+	            this.props.handleClick({
+	                label: this.props.label,
+	                url: this.props.url
+	            });
 	        }
 	    }, {
 	        key: 'render',
@@ -22102,6 +22107,7 @@
 	            return _react2.default.createElement(Stat, { key: stat.label,
 	                label: stat.label,
 	                value: stat.value,
+	                url: stat.url,
 	                handleClick: props.handler });
 	        })
 	    );
@@ -22130,26 +22136,87 @@
 	    );
 	}
 	
-	var App = function (_Component2) {
-	    _inherits(App, _Component2);
+	var UserCard = function (_Component2) {
+	    _inherits(UserCard, _Component2);
+	
+	    function UserCard(props) {
+	        _classCallCheck(this, UserCard);
+	
+	        return _possibleConstructorReturn(this, (UserCard.__proto__ || Object.getPrototypeOf(UserCard)).call(this, props));
+	    }
+	
+	    _createClass(UserCard, [{
+	        key: 'render',
+	        value: function render() {
+	            var user = this.props.user;
+	            var avatar_url = user.avatar_url,
+	                html_url = user.html_url,
+	                name = user.name,
+	                email = user.email;
+	            var login = user.login,
+	                followers = user.followers,
+	                following = user.following;
+	            var public_gists = user.public_gists,
+	                public_repos = user.public_repos;
+	            var followers_url = user.followers_url;
+	
+	
+	            console.log(followers_url);
+	
+	            var stats = [{ label: 'Followers', value: followers, url: followers_url }, { label: 'Following', value: following }, { label: 'Repos', value: public_repos }, { label: 'Gists', value: public_gists }];
+	
+	            return _react2.default.createElement(
+	                'article',
+	                { className: 'row' },
+	                _react2.default.createElement(_Components.Avatar, { width: '200px', height: '200px', url: avatar_url, name: name }),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'col-xs-12 col-sm-8' },
+	                    _react2.default.createElement(
+	                        _Components.LinkedName,
+	                        { profileUrl: html_url },
+	                        name
+	                    ),
+	                    _react2.default.createElement(_Components.UserTags, { tags: [login, email] }),
+	                    _react2.default.createElement(Stats, { data: stats, handler: this.props.handleClickStat })
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return UserCard;
+	}(_react.Component);
+	
+	var App = function (_Component3) {
+	    _inherits(App, _Component3);
 	
 	    function App(props) {
 	        _classCallCheck(this, App);
 	
-	        var _this2 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+	        var _this3 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 	
-	        _this2.state = { value: '' };
+	        _this3.state = {
+	            value: '',
+	            user: undefined,
+	            list: undefined
+	        };
 	
-	        _this2.handleSubmit = _this2.handleSubmit.bind(_this2);
-	        _this2.handleChange = _this2.handleChange.bind(_this2);
-	        _this2.handleClickStat = _this2.handleClickStat.bind(_this2);
-	        return _this2;
+	        _this3.handleSubmit = _this3.handleSubmit.bind(_this3);
+	        _this3.handleChange = _this3.handleChange.bind(_this3);
+	        _this3.handleClickStat = _this3.handleClickStat.bind(_this3);
+	        return _this3;
 	    }
 	
 	    _createClass(App, [{
 	        key: 'handleClickStat',
-	        value: function handleClickStat(label) {
-	            console.log(label);
+	        value: function handleClickStat(stat) {
+	            console.log(stat);
+	            this.setState({
+	                list: {
+	                    url: stat.url,
+	                    label: stat.label
+	                }
+	            });
 	        }
 	    }, {
 	        key: 'handleChange',
@@ -22159,14 +22226,15 @@
 	    }, {
 	        key: 'handleSubmit',
 	        value: function handleSubmit(e) {
-	            var _this3 = this;
+	            var _this4 = this;
 	
 	            var url = 'https://api.github.com/users/' + this.state.value;
 	            fetch(url).then(function (response) {
+	                _this4.setState({ user: undefined });
 	                return response.json();
 	            }).then(function (data) {
 	                console.log(data);
-	                if (!data.message) _this3.setState({ user: data });
+	                if (!data.message) _this4.setState({ user: data });
 	            }).catch(function (err) {
 	                return console.log(err);
 	            });
@@ -22175,58 +22243,25 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var user = this.state.user;
 	
-	            if (user) {
-	                var avatar_url = user.avatar_url,
-	                    html_url = user.html_url,
-	                    name = user.name,
-	                    email = user.email;
-	                var login = user.login,
-	                    followers = user.followers,
-	                    following = user.following;
-	                var public_gists = user.public_gists,
-	                    public_repos = user.public_repos;
+	            var userCard = '';
 	
-	
-	                var stats = [{ label: 'Followers', value: followers }, { label: 'Following', value: following }, { label: 'Repos', value: public_repos }, { label: 'Gists', value: public_gists }];
-	
-	                return _react2.default.createElement(
-	                    'div',
-	                    null,
-	                    _react2.default.createElement(UserNameForm, {
-	                        handleSubmit: this.handleSubmit,
-	                        handleChange: this.handleChange,
-	                        value: this.state.value
-	                    }),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'row' },
-	                        _react2.default.createElement(_Components.Avatar, { url: avatar_url, name: name }),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'col-xs-12 col-sm-8' },
-	                            _react2.default.createElement(
-	                                _Components.LinkedName,
-	                                { profileUrl: html_url },
-	                                name
-	                            ),
-	                            _react2.default.createElement(_Components.UserTags, { tags: [login, email] }),
-	                            _react2.default.createElement(Stats, { data: stats, handler: this.handleClickStat })
-	                        )
-	                    )
-	                );
-	            } else {
-	                return _react2.default.createElement(
-	                    'div',
-	                    { className: 'row' },
-	                    _react2.default.createElement(UserNameForm, {
-	                        handleSubmit: this.handleSubmit,
-	                        handleChange: this.handleChange,
-	                        value: this.state.value
-	                    })
-	                );
+	            if (this.state.user) {
+	                userCard = _react2.default.createElement(UserCard, { handleClickStat: this.handleClickStat,
+	                    user: this.state.user
+	                });
 	            }
+	
+	            return _react2.default.createElement(
+	                'section',
+	                null,
+	                _react2.default.createElement(UserNameForm, {
+	                    handleSubmit: this.handleSubmit,
+	                    handleChange: this.handleChange,
+	                    value: this.state.value
+	                }),
+	                userCard
+	            );
 	        }
 	    }]);
 	
@@ -22237,6 +22272,57 @@
 
 /***/ },
 /* 179 */
+/*!********************!*\
+  !*** ./js/User.js ***!
+  \********************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.UserList = undefined;
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _Components = __webpack_require__(/*! ./Components */ 180);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function UserItem(props) {
+	    return _react2.default.createElement(
+	        'article',
+	        null,
+	        _react2.default.createElement(_Components.Avatar, { url: props.avatar_url, name: props.children }),
+	        _react2.default.createElement(
+	            _Components.LinkedName,
+	            { profileUrl: props.html_url },
+	            props.children
+	        )
+	    );
+	}
+	
+	function UserList(props) {
+	    return _react2.default.createElement(
+	        Section,
+	        null,
+	        props.items.map(function (user) {
+	            return _react2.default.createElement(
+	                UserItem,
+	                { key: user.id, url: user.avatar_url, profileUrl: user.html_url },
+	                user.login
+	            );
+	        })
+	    );
+	}
+	
+	exports.UserList = UserList;
+
+/***/ },
+/* 180 */
 /*!**************************!*\
   !*** ./js/Components.js ***!
   \**************************/
@@ -22289,17 +22375,23 @@
 	}
 	
 	function UserTags(props) {
+	    var tags = props.tags.filter(function (tag) {
+	        return tag != null;
+	    });
+	
+	    tags = tags.map(function (tag) {
+	        return _react2.default.createElement(
+	            Tag,
+	            { key: tag },
+	            tag,
+	            ' \u2022 '
+	        );
+	    });
+	
 	    return _react2.default.createElement(
 	        'div',
 	        null,
-	        props.tags.map(function (tag) {
-	            return _react2.default.createElement(
-	                Tag,
-	                null,
-	                tag,
-	                ' \u2022 '
-	            );
-	        })
+	        tags
 	    );
 	}
 	

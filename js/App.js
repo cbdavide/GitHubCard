@@ -1,5 +1,8 @@
+'use strict';
+
 import React, { Component } from 'react';
-import {Avatar, LinkedName, UserTags} from './Components'
+import {Avatar, LinkedName, UserTags} from './Components';
+import {UserList} from './User';
 
 class Stat extends Component {
     constructor(props) {
@@ -9,7 +12,10 @@ class Stat extends Component {
     }
 
     handleClick() {
-        this.props.handleClick({label: this.props.label})
+        this.props.handleClick({
+            label: this.props.label,
+            url: this.props.url
+        })
     }
 
     render() {
@@ -29,6 +35,7 @@ function Stats(props) {
                 return (<Stat key={stat.label}
                              label={stat.label}
                              value={stat.value}
+                             url={stat.url}
                              handleClick={props.handler} />
                          );
             })}
@@ -55,18 +62,63 @@ function UserNameForm(props) {
     );
 }
 
+class UserCard extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        let {user} = this.props;
+        let {avatar_url, html_url, name, email} = user;
+        let {login, followers, following} = user;
+        let {public_gists, public_repos} = user;
+        let {followers_url} = user;
+
+        console.log(followers_url);
+
+        let stats = [
+            {label: 'Followers', value: followers, url: followers_url},
+            {label: 'Following', value: following},
+            {label: 'Repos', value: public_repos},
+            {label: 'Gists', value: public_gists},
+        ]
+
+        return (
+            <article className="row">
+                <Avatar width="200px" height="200px" url={avatar_url} name={name} />
+                <div className="col-xs-12 col-sm-8">
+                    <LinkedName profileUrl={html_url}>{name}</LinkedName>
+                    <UserTags tags={[login, email]} />
+                    <Stats data={stats} handler={this.props.handleClickStat}/>
+                </div>
+            </article>
+        );
+    }
+}
+
 class App extends Component {
     constructor(props) {
         super(props);
-        this.state = {value: ''}
+
+        this.state = {
+            value: '',
+            user: undefined,
+            list: undefined,
+        }
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleClickStat = this.handleClickStat.bind(this);
     }
 
-    handleClickStat(label) {
-        console.log(label);
+    handleClickStat(stat) {
+        console.log(stat);
+        this.setState({
+            list: {
+                url: stat.url,
+                label: stat.label
+            }
+        })
     }
 
     handleChange(e) {
@@ -76,7 +128,10 @@ class App extends Component {
     handleSubmit(e) {
         let url = `https://api.github.com/users/${this.state.value}`
         fetch(url)
-            .then(response => response.json())
+            .then(response => {
+                this.setState({user: undefined})
+                return response.json()
+            })
             .then(data => {
                 console.log(data)
                 if(!data.message)
@@ -85,52 +140,29 @@ class App extends Component {
             .catch(err => console.log(err))
         e.preventDefault();
     }
-
     render() {
-        let {user} = this.state;
-        if(user) {
-            let {avatar_url, html_url, name, email} = user;
-            let {login, followers, following} = user;
-            let {public_gists, public_repos} = user;
 
-            let stats = [
-                {label: 'Followers', value: followers},
-                {label: 'Following', value: following},
-                {label: 'Repos', value: public_repos},
-                {label: 'Gists', value: public_gists},
-            ]
+        let userCard = '';
 
-            return (
-                <div>
-                    <UserNameForm
-                        handleSubmit={this.handleSubmit}
-                        handleChange={this.handleChange}
-                        value={this.state.value}
-                    />
-                    <div className="row">
-                        <Avatar url={avatar_url} name={name} />
-                        <div className="col-xs-12 col-sm-8">
-                            <LinkedName profileUrl={html_url}>{name}</LinkedName>
-                            <UserTags tags={[login, email]} />
-                            <Stats data={stats} handler={this.handleClickStat}/>
-                        </div>
-                    </div>
-                </div>
-            );
-        } else {
-            return (
-                <div className="row">
-                    <UserNameForm
-                        handleSubmit={this.handleSubmit}
-                        handleChange={this.handleChange}
-                        value={this.state.value}
-                    />
-                </div>
-            );
+        if(this.state.user){
+            userCard = (
+                <UserCard handleClickStat={this.handleClickStat}
+                user={this.state.user}
+                />
+            )
         }
+
+        return (
+            <section>
+                <UserNameForm
+                    handleSubmit={this.handleSubmit}
+                    handleChange={this.handleChange}
+                    value={this.state.value}
+                />
+                {userCard}
+            </section>
+        );
     }
 }
-
-
 
 export default App;
